@@ -1,0 +1,26 @@
+{
+  "name": "yelpcamp",
+  "version": "1.0.0",
+  "description": "An express app about camping.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohammadasim/YelpCamp.git"
+  },
+  "author": "Mohammad Ayub",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mohammadasim/YelpCamp/issues"
+  },
+  "homepage": "https://github.com/mohammadasim/YelpCamp#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  }
+}
