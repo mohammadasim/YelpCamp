@@ -11,9 +11,9 @@ app.use(bodyParser.urlencoded({
 app.set("view engine", "ejs");
 
 var campgrounds = [
-    {name: "Salmon Creek", image: 'https://pixabay.com/get/5fe8d1434852b108f5d084609620367d1c3ed9e04e50744f7d2f7ad7974bc2_340.jpg'},
-    {name: "Granite Hill", image: 'https://pixabay.com/get/57e2d54b4852ad14f6da8c7dda793f7f1636dfe2564c704c73277bd5944dc35f_340.jpg'},
-    {name: "Mountain Goat's Rest", image: 'https://pixabay.com/get/57e8d3444855a914f6da8c7dda793f7f1636dfe2564c704c73277bd5944dc35f_340.jpg'}
+    {name: "Salmon Creek", image: 'https://image.shutterstock.com/image-photo/vacation-caravan-natural-landscape-260nw-1380610373.jpg'},
+    {name: "Granite Hill", image: 'https://image.shutterstock.com/image-photo/camper-camping-glacier-lake-van-260nw-471344468.jpg'},
+    {name: "Mountain Goat's Rest", image: 'https://image.shutterstock.com/image-photo/family-vacation-travel-holiday-trip-260nw-706056724.jpg'}
 ]
 
 app.get("/", (req, res) => {
