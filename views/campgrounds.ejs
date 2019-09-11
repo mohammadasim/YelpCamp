@@ -1,13 +1,38 @@
 <% include partials/header %>
-<h1>Welcome to the campgrounds page</h1>
-<a href="/campgrounds/new">Add new camp grounds</a>
-<p>Following the list of campgrounds we have</p>
-<% campgrounds.forEach(function(campground){ %>
-<div>
-    <h4><%= campground.name %></h4>
-    <img src="<%= campground.image %>" alt="Camp Image">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+        <div class="navbar header">
+            <a class="navbar-brand" href="/">YelpCamp</a>
+        </div>
+        <div class="collapse navbar collapse">
+
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <header class="jumbotron">
+        <div class="container">
+            <h1>Welcome to YelpCamp the home of adventures!</h1>
+            <p>View our hand-picked campground from all over the world and embrace the adventure.</p>
+            <p>
+                <a class="btn btn-primary btn-lg" href="/campgrounds/new">Add new camp grounds</a>
+            </p>
+        </div>
+    </header>
+    <p>Following the list of campgrounds we have</p>
+    <div class="container-fluid">
+        <div class="row text-center d-flex align-content-around">
+            <% campgrounds.forEach(function(campground){ %>
+            <div class="col-12 col-md-4 d-flex align-content-around flex-wrap" id="colum1">
+                <div class="img-thumbnail">
+                    <figure class="figure">
+                        <img src="<%= campground.image %>" class="img-fluid" alt="Responsive image">
+                        <figcaption class="figure-caption"><%= campground.name %></figcaption>
+                    </figure>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
 </div>
-
-<% }) %>
-
 <% include partials/footer %>
