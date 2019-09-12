@@ -1,36 +1,66 @@
 const express = require("express");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+
+// DB CONNECTION SETUP
+var DATABASE_URL = process.env.MONGODB_DATABASE_URL;
+mongoose.Promise = global.Promise;
+mongoose.connect(DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    console.log("We are connected to the database!!");
+});
+
+//SCHEMA SETUP
+var campgroundSchema = mongoose.Schema({
+  name: String,
+  image: String
+});
+
+var Campground = mongoose.model('Campground', campgroundSchema);
+
 
 
 const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true
 }));
 app.set("view engine", "ejs");
 
-var campgrounds = [
-    {name: "Salmon Creek", image: 'https://image.shutterstock.com/image-photo/vacation-caravan-natural-landscape-260nw-1380610373.jpg'},
-    {name: "Granite Hill", image: 'https://image.shutterstock.com/image-photo/camper-camping-glacier-lake-van-260nw-471344468.jpg'},
-    {name: "Mountain Goat's Rest", image: 'https://image.shutterstock.com/image-photo/family-vacation-travel-holiday-trip-260nw-706056724.jpg'}
-]
 
 app.get("/", (req, res) => {
   res.render("landing");
 });
 
 app.get("/campgrounds", (req, res) => {
-  res.render("campgrounds", {campgrounds:campgrounds});
+  Campground.find((err, results) => {
+    if (err) {
+      console.log('An Error was thrown: ', err)
+    } else {
+      res.render("campgrounds", {
+        campgrounds: results
+      });
+    }
+  })
 });
 
 app.post("/campgrounds", (req, res) => {
-    var newCampground = {
-        name: req.body.name,
-        image: req.body.image
+  Campground.create({
+    name: req.body.name,
+    image: req.body.image
+  }, (err, campground) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/campgrounds");
     }
-    campgrounds.push(newCampground);
-  res.redirect("/campgrounds");
+  });
 });
 
 app.get("/campgrounds/new", (req, res) => {

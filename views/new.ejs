@@ -1,9 +1,19 @@
 <% include partials/header %>
-<h1>This is the new campground form</h1>
-<form action="/campgrounds" method="POST">
-    <input type="text" name="name" id="" placeholder="name">
-    <input type="text" name="image" id="" placeholder="image url">
-    <button type="submit">Submit!</button>
-</form>
-<a class="btn btn-primary btn-lg" href="/campgrounds">Back</a>
+<div class="container">
+    <h2>Create a new Camp ground</h2>
+    <div id="newcampform">
+        <form action="/campgrounds" method="POST">
+            <div class="form-group">
+                <input class="form-control" type="text" name="name" id="" placeholder="name">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="image" id="" placeholder="image url">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit!</button>
+            </div>
+        </form>
+        <a href="/campgrounds">Back</a>
+    </div>
+</div>
 <% include partials/footer %>
