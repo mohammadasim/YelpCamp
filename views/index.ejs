@@ -19,6 +19,9 @@
                         <img src="<%= campground.image %>" class="img-fluid" alt="Responsive image">
                         <figcaption class="figure-caption"><%= campground.name %></figcaption>
                     </figure>
+                    <p>
+                        <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More info</a>
+                    </p>
                 </div>
             </div>
             <% }) %>

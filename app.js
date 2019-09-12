@@ -2,6 +2,13 @@ const express = require("express");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const app = express();
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.set("view engine", "ejs");
+
 
 // DB CONNECTION SETUP
 var DATABASE_URL = process.env.MONGODB_DATABASE_URL;
@@ -19,21 +26,14 @@ db.once('open', function() {
 //SCHEMA SETUP
 var campgroundSchema = mongoose.Schema({
   name: String,
-  image: String
+  image: String,
+  description: String
 });
 
+// Mongoose Model setup
 var Campground = mongoose.model('Campground', campgroundSchema);
 
-
-
-const app = express();
-app.use(express.static("public"));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.set("view engine", "ejs");
-
-
+// APP ROUTES
 app.get("/", (req, res) => {
   res.render("landing");
 });
@@ -43,7 +43,7 @@ app.get("/campgrounds", (req, res) => {
     if (err) {
       console.log('An Error was thrown: ', err)
     } else {
-      res.render("campgrounds", {
+      res.render("index", {
         campgrounds: results
       });
     }
@@ -53,7 +53,8 @@ app.get("/campgrounds", (req, res) => {
 app.post("/campgrounds", (req, res) => {
   Campground.create({
     name: req.body.name,
-    image: req.body.image
+    image: req.body.image,
+    description: req.body.description
   }, (err, campground) => {
     if (err) {
       console.log(err);
@@ -67,5 +68,8 @@ app.get("/campgrounds/new", (req, res) => {
   res.render("new");
 });
 
+app.get("/campgrounds/:id", (req, res) => {
+  res.render("show");  
+});
 const port = process.env.PORT || 5000;
 app.listen(port, () => `Yelp Camp server is running on port ${port} 🔥`);
