@@ -69,7 +69,13 @@ app.get("/campgrounds/new", (req, res) => {
 });
 
 app.get("/campgrounds/:id", (req, res) => {
-  res.render("show");  
+  Campground.findById(req.params.id,(err, searchedCampground)=>{
+    if(err){
+      console.log('An error has happened ', err)
+    } else{
+      res.render("show", {searchedCampground:searchedCampground});  
+    }
+  });
 });
 const port = process.env.PORT || 5000;
 app.listen(port, () => `Yelp Camp server is running on port ${port} 🔥`);
