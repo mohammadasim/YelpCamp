@@ -2,6 +2,7 @@ const express = require("express");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const Campground = require("./models/campground");
 const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
@@ -22,16 +23,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     console.log("We are connected to the database!!");
 });
-
-//SCHEMA SETUP
-var campgroundSchema = mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-});
-
-// Mongoose Model setup
-var Campground = mongoose.model('Campground', campgroundSchema);
 
 // APP ROUTES
 app.get("/", (req, res) => {
