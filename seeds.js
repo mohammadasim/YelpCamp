@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const mongoose = require("./connection");
 const Campground = require("./models/campground");
 
-var data = [
+var seeds = [
     {
         name: "Cloud's Rest", 
         image: "https://farm4.staticflickr.com/3795/10131087094_c1c0a1c859.jpg",
@@ -18,31 +18,18 @@ var data = [
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     }
 ]
-
 function seedDB(){
     // Remove all campgrounds
-    Campground.deleteMany({}, (err) =>{
-        if(err){
-            console.log("An error happened when trying to remove all the docs from the collection ", err);
+    Campground.deleteMany({})
+    .then(()=>{
+        console.log("************************** DB CLEANED *********************************");
+        for (const seed of seeds) {
+            Campground.create(seed).then();
         }
-        else{
-            console.log("************************** DB CLEANED *********************************");
-        }
+    })
+    .catch((err)=>{
+        console.log("An error happened when trying to remove all the docs from the collection and recreating test data ", err);
     });
-    // Add campgrounds
-    data.forEach((seed) =>{
-        Campground.create(seed, (err, campgroundCreate) =>{
-            if(err){
-                console.log("An error occured while creating campground ", err);
-            }
-            else{
-                console.log(campgroundCreate);
-            }
-        });
-    });
-
-    // Add comments
 }
-
 module.exports = seedDB;
 
