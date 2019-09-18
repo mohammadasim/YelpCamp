@@ -3,6 +3,7 @@ const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const mongoose = require("./connection");
 const Campground = require("./models/campground");
+const Comment = require("./models/comment");
 const seedDB     = require("./seeds");
 const app = express();
 app.use(express.static("public"));

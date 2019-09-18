@@ -1,4 +1,5 @@
 const mongoose = require("./connection");
+const Comment = require("./models/comment");
 const Campground = require("./models/campground");
 
 var seeds = [
@@ -18,18 +19,36 @@ var seeds = [
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     }
 ]
-function seedDB(){
-    // Remove all campgrounds
-    Campground.deleteMany({})
-    .then(()=>{
-        console.log("************************** DB CLEANED *********************************");
+var comment = {
+    text: "Very nice place. Enjoyed my time there. Close to nature and nice facilities. No wifi and phone singnal is weak as well. Hope they will setup a wifi.",
+    author: "theCampingBoy"
+
+}
+async function seedDB(){
+    
+    try {
+        //Remove all campgrounds
+        await Campground.deleteMany({});
+        // Remove all comments
+        await Comment.deleteMany({});
+        console.log("************************ CAMPGROUNDS & COMMENTS REMOVED *********************************");
+        //Create campgrounds
         for (const seed of seeds) {
-            Campground.create(seed);
+            Campground.create(seed).then((createdCampground)=>{
+                // Create comment
+                Comment.create(comment).then((newComment)=>{
+                    createdCampground.comments.push(newComment);
+                    createdCampground.save();
+                }).catch((err) =>{console.log("An Error occured while creating new comment ", err)}); 
+                
+            })
+            .catch((err) =>{
+                console.log("An Error occured while creating a new campground", err);
+            })
         }
-    })
-    .catch((err)=>{
-        console.log("An error happened when trying to remove all the docs from the collection and recreating test data ", err);
-    });
+    } catch (error) {
+        
+    }
 }
 module.exports = seedDB;
 
