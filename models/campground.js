@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("../connection");
 //SCHEMA SETUP
 var campgroundSchema = mongoose.Schema({
     name: String,

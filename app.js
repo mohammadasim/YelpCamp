@@ -1,7 +1,7 @@
 const express = require("express");
 const rp = require("request-promise");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
+const mongoose = require("./connection");
 const Campground = require("./models/campground");
 const seedDB     = require("./seeds");
 const app = express();
@@ -10,20 +10,10 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.set("view engine", "ejs");
+mongoose.Promise = Promise;
 
 seedDB();
-// DB CONNECTION SETUP
-var DATABASE_URL = process.env.MONGODB_DATABASE_URL;
-mongoose.Promise = global.Promise;
-mongoose.connect(DATABASE_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    console.log("We are connected to the database!!");
-});
+
 
 // APP ROUTES
 app.get("/", (req, res) => {
@@ -31,14 +21,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/campgrounds", (req, res) => {
-  Campground.find((err, results) => {
-    if (err) {
-      console.log('An Error was thrown: ', err)
-    } else {
-      res.render("index", {
-        campgrounds: results
-      });
-    }
+  Campground.find()
+  .then((campgrounds)=>{
+    res.render("index", {campgrounds: campgrounds});
+  })
+  .catch(err =>{
+    console.log("Error occured while retrieving campgrounds ", err);
   })
 });
 
@@ -47,13 +35,11 @@ app.post("/campgrounds", (req, res) => {
     name: req.body.name,
     image: req.body.image,
     description: req.body.description
-  }, (err, campground) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.redirect("/campgrounds");
-    }
-  });
+  }).then(()=>{
+    res.redirect("/campgrounds");
+  }) .catch(err =>{
+    console.log("Error has happended while creating new campground ", err);
+  })
 });
 
 app.get("/campgrounds/new", (req, res) => {
@@ -61,12 +47,12 @@ app.get("/campgrounds/new", (req, res) => {
 });
 
 app.get("/campgrounds/:id", (req, res) => {
-  Campground.findById(req.params.id,(err, searchedCampground)=>{
-    if(err){
-      console.log('An error has happened ', err)
-    } else{
-      res.render("show", {searchedCampground:searchedCampground});  
-    }
+  Campground.findById(req.params.id)
+  .then((searchedCampground)=>{
+    res.render("show", {searchedCampground:searchedCampground});
+  })
+  .catch((err)=>{
+    console.log("An Error happened while retrieving campground ", err);
   });
 });
 const port = process.env.PORT || 5000;
