@@ -3,6 +3,7 @@ const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const Campground = require("./models/campground");
+const seedDB     = require("./seeds");
 const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
@@ -10,7 +11,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.set("view engine", "ejs");
 
-
+seedDB();
 // DB CONNECTION SETUP
 var DATABASE_URL = process.env.MONGODB_DATABASE_URL;
 mongoose.Promise = global.Promise;
