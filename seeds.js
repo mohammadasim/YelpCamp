@@ -24,7 +24,7 @@ function seedDB(){
     .then(()=>{
         console.log("************************** DB CLEANED *********************************");
         for (const seed of seeds) {
-            Campground.create(seed).then();
+            Campground.create(seed);
         }
     })
     .catch((err)=>{
