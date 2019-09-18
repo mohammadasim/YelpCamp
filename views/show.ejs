@@ -2,5 +2,10 @@
 <p><%= searchedCampground.name %></p>
 <img src="<%= searchedCampground.image %>" alt="Campground image">
 <p><%= searchedCampground.description%></p>
-
+<h3>Comments</h3>
+<% for(var comment of searchedCampground.comments ){%>
+<p><%= comment.text %></p>
+<h4> Author </h4>
+<p><%= comment.author %></p>
+<% } %>
 <% include partials/footer %>

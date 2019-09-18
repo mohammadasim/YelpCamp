@@ -48,10 +48,11 @@ app.get("/campgrounds/new", (req, res) => {
 });
 
 app.get("/campgrounds/:id", (req, res) => {
-  Campground.findById(req.params.id)
+  Campground.findById(req.params.id).populate("comments").exec()
   .then((searchedCampground)=>{
-    res.render("show", {searchedCampground:searchedCampground});
-  })
+      res.render("show", {searchedCampground:searchedCampground});
+    
+    })
   .catch((err)=>{
     console.log("An Error happened while retrieving campground ", err);
   });
