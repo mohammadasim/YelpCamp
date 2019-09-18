@@ -1,4 +1,3 @@
-const mongoose = require("./connection");
 const Comment = require("./models/comment");
 const Campground = require("./models/campground");
 
