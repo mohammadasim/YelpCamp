@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 app.get("/campgrounds", (req, res) => {
   Campground.find()
   .then((campgrounds)=>{
-    res.render("index", {campgrounds: campgrounds});
+    res.render("campgrounds/index", {campgrounds: campgrounds});
   })
   .catch(err =>{
     console.log("Error occured while retrieving campgrounds ", err);
@@ -44,18 +44,24 @@ app.post("/campgrounds", (req, res) => {
 });
 
 app.get("/campgrounds/new", (req, res) => {
-  res.render("new");
+  res.render("campgrounds/new");
 });
 
 app.get("/campgrounds/:id", (req, res) => {
   Campground.findById(req.params.id).populate("comments").exec()
   .then((searchedCampground)=>{
-      res.render("show", {searchedCampground:searchedCampground});
+      res.render("campgrounds/show", {searchedCampground:searchedCampground});
     
     })
   .catch((err)=>{
     console.log("An Error happened while retrieving campground ", err);
   });
+});
+
+//***************************** COMMENTS ROUTES ************************************/
+
+app.get("/campgrounds/:id/comments/new", (req, res) => {
+  res.render("comments/new");
 });
 const port = process.env.PORT || 5000;
 app.listen(port, () => `Yelp Camp server is running on port ${port} 🔥`);
