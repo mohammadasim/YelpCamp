@@ -1,0 +1,30 @@
+body {
+    font-family: 'Raleway', sans-serif;
+}
+
+#newcampform {
+    width: 30%;
+    margin: 25px auto;
+}
+
+.container {
+    margin-top: 25px;
+}
+
+.container h2 {
+    text-align: center;
+}
+
+.card {
+    margin-top: 20px;
+    background: whitesmoke;
+}
+.img-thumbnail img{
+    width: 100%;
+}
+.img-thumbnail{
+    padding: 0;
+}
+.img-thumbnail .caption{
+    padding: 10px;
+}

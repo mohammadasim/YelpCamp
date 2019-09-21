@@ -1,11 +1,47 @@
 <% include ../partials/header %>
-<p><%= searchedCampground.name %></p>
-<img src="<%= searchedCampground.image %>" alt="Campground image">
-<p><%= searchedCampground.description%></p>
-<% for(var comment of searchedCampground.comments ){ %>
-<h3>Comments</h3>
-<p><%= comment.text %></p>
-<h4> Author </h4>
-<p><%= comment.author %></p>
-<% } %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">YelpCamp</p>
+            <div class="list-group">
+                <li class="list-group-item active">Info 1</li>
+                <li class="list-group-item">Info 2</li>
+                <li class="list-group-item">Info 3</li>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="img-thumbnail">
+
+                <img src="<%= searchedCampground.image %>" class="img-fluid mx-auto d-block" alt="Campground image">
+                <div class="caption">
+                    <div class="d-flex justify-content-between">
+                        <h4 class="text-primary"><a><%= searchedCampground.name %></a></h4>
+                        <h4 class="figure-caption text-right"><strong>£9.00/night</strong></h4>
+                    </div>
+                    <p><%- searchedCampground.description %></p>
+                </div>
+            </div>
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="text-right">
+                        <a class="btn btn-success" href="/campgrounds/<%= searchedCampground._id%>/comments/new">Add New
+                            Comment</a>
+                    </div>
+                    <hr>
+                    <% for(var comment of searchedCampground.comments ){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between">
+                                <strong><%= comment.author %></strong>
+                                <span class="text-muted"> 10 days ago</span>
+                            </div>
+                            <p><%- comment.text %></p>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer %>

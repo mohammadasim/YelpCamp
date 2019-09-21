@@ -3,13 +3,15 @@ const rp = require("request-promise");
 const bodyParser = require("body-parser");
 const mongoose = require("./connection");
 const Campground = require("./models/campground");
+const expressSanitizer = require("express-sanitizer");
 const Comment = require("./models/comment");
 const seedDB     = require("./seeds");
 const app = express();
-app.use(express.static("public"));
+app.use(express.static(__dirname +"/public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(expressSanitizer()); //Important to place it after the body-parser use statement
 app.set("view engine", "ejs");
 mongoose.Promise = Promise;
 
@@ -70,6 +72,8 @@ app.get("/campgrounds/:id/comments/new", (req, res) => {
 });
 
 app.post("/campgrounds/:id/comments", (req, res) => {
+  req.body.comment.text = req.sanitize(req.body.comment.text);
+  console.log(req.body.comment);
   Campground.findById(req.params.id).then((foundCampground) =>{
     Comment.create(req.body.comment).then((createdComment)=>{
       foundCampground.comments.push(createdComment);
