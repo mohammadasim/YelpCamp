@@ -73,7 +73,6 @@ app.get("/campgrounds/:id/comments/new", (req, res) => {
 
 app.post("/campgrounds/:id/comments", (req, res) => {
   req.body.comment.text = req.sanitize(req.body.comment.text);
-  console.log(req.body.comment);
   Campground.findById(req.params.id).then((foundCampground) =>{
     Comment.create(req.body.comment).then((createdComment)=>{
       foundCampground.comments.push(createdComment);
