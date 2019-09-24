@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"),
+      keys = require("./keys")
 
 // DB CONNECTION SETUP
-var DATABASE_URL = process.env.MONGODB_DATABASE_URL;
+var DATABASE_URL = keys.mongodb.mongodb_url;
 mongoose.Promise = global.Promise;
 mongoose.connect(DATABASE_URL, {
     useNewUrlParser: true,

@@ -1,4 +1,4 @@
-const mongoose = require("../connection");
+const mongoose = require("../config/connection");
 //SCHEMA SETUP
 var commentSchema = mongoose.Schema({
     text: String,
