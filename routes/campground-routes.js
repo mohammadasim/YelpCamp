@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Campground = require("../models/campground");
 const Comment = require("../models/comment");
+const checkLogin = require("../config/middleware");
 
 
 router.get("/", (req, res) => {
@@ -46,7 +47,7 @@ router.get("/:id", (req, res) => {
 
 //***************************** COMMENTS ROUTES ************************************/
 
-router.get("/:id/comments/new",require("../config/middleware"),(req, res) => {
+router.get("/:id/comments/new",checkLogin,(req, res) => {
     Campground.findById(req.params.id).then((foundCampground) => {
             res.render("comments/new", {
                 campground: foundCampground
@@ -57,7 +58,7 @@ router.get("/:id/comments/new",require("../config/middleware"),(req, res) => {
         });
 });
 
-router.post("/:id/comments", (req, res) => {
+router.post("/:id/comments",checkLogin,(req, res) => {
     req.body.comment.text = req.sanitize(req.body.comment.text);
     Campground.findById(req.params.id).then((foundCampground) => {
         Comment.create(req.body.comment).then((createdComment) => {
