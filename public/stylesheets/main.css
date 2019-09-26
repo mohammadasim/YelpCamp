@@ -2,8 +2,8 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
-#newcampform {
-    width: 30%;
+.campform {
+    width: 40%;
     margin: 25px auto;
 }
 

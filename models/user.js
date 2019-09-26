@@ -1,11 +1,11 @@
 const mongoose = require("../config/connection");
+const passportLocalMongoose = require("passport-local-mongoose");
 //SCHEMA SETUP
 var userSchema = mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    email: String,
-    username: String
-  });
-  
-  // Export module
-  module.exports = mongoose.model('User', userSchema);
+  userName: String,
+  password: String
+});
+
+userSchema.plugin(passportLocalMongoose);
+// Export module
+module.exports = mongoose.model('User', userSchema);
