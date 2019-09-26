@@ -23,7 +23,6 @@ router.post("/register", (req, res) => {
   })
 });
 
-
 router.get("/signin", (req, res) => {
   res.render("auth/signin")
 });
@@ -32,6 +31,10 @@ router.post("/signin", passport.authenticate("local", {
   failureRedirect: "/auth/signin"
 }));
 
+router.get("/signout", (req, res) => {
+  req.logOut();
+  res.redirect("/");
+});
 
 
 

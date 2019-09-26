@@ -46,7 +46,7 @@ router.get("/:id", (req, res) => {
 
 //***************************** COMMENTS ROUTES ************************************/
 
-router.get("/:id/comments/new", (req, res) => {
+router.get("/:id/comments/new",require("../config/middleware"),(req, res) => {
     Campground.findById(req.params.id).then((foundCampground) => {
             res.render("comments/new", {
                 campground: foundCampground
