@@ -3,7 +3,7 @@ const User = require("../models/user");
 const passport = require("passport");
 
 
-
+// new user registration form
 router.get("/register", (req, res) => {
   res.render("auth/register");
 });

@@ -1,17 +1,24 @@
-const express = require("express");
-const rp = require("request-promise");
-const bodyParser = require("body-parser");
-const mongoose = require("./config/connection");
-const expressSanitizer = require("express-sanitizer");
-const seedDB = require("./seeds");
-const keys = require("./config/keys");
+const express = require("express"),
+  bodyParser = require("body-parser"),
+  expressSanitizer = require("express-sanitizer"),
+  passport = require("passport"),
+  session = require("express-session")
+
+const mongoose = require("./config/connection"),
+  seedDB = require("./seeds"),
+  keys = require("./config/keys"),
+  passportSetup = require("./config/passport-setup");
+
+
+const campgroundRoutes = require("./routes/campground-routes"),
+  authRoutes = require("./routes/auth-routes"),
+  commentRoutes = require("./routes/comments-routes"),
+  indexRoutes = require("./routes/index-routes")
+
+//const User = require("./models/user");
+
+
 const app = express();
-const campgroundRoutes = require("./routes/campground-routes");
-const authRoutes = require("./routes/auth-routes");
-const passport = require("passport");
-const User = require("./models/user");
-const session = require("express-session");
-const passportSetup = require("./config/passport-setup");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({
   extended: true
@@ -30,20 +37,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 /**********************************************************************************************/
 app.use(expressSanitizer()); //Important to place it after the body-parser use statement
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
-app.use("/campgrounds", campgroundRoutes);
-app.use("/auth", authRoutes);
+app.use("/",indexRoutes);
+app.use("/campgrounds",campgroundRoutes);
+app.use("/campgrounds/:id/comments",commentRoutes);
+app.use("/auth",authRoutes);
+
+
 app.set("view engine", "ejs");
 mongoose.Promise = Promise;
 seedDB();
-/******************************** APP ROUTES ***************************************************/
 
-app.get("/", (req, res) => {
-  res.render("landing");
-});
 
 /******************************* STARTING SERVER **********************************************/
 
