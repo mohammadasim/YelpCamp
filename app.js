@@ -30,11 +30,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 /**********************************************************************************************/
 app.use(expressSanitizer()); //Important to place it after the body-parser use statement
+app.use((req, res, next)=>{
+  res.locals.currentUser = req.user;
+  next();
+});
 app.use("/campgrounds", campgroundRoutes);
 app.use("/auth", authRoutes);
 app.set("view engine", "ejs");
 mongoose.Promise = Promise;
-
 seedDB();
 /******************************** APP ROUTES ***************************************************/
 

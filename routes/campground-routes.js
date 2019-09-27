@@ -3,7 +3,7 @@ const Campground = require("../models/campground");
 const Comment = require("../models/comment");
 const checkLogin = require("../config/middleware");
 
-
+// Show all campgrounds
 router.get("/", (req, res) => {
     Campground.find()
         .then((campgrounds) => {

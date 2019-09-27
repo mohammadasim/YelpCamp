@@ -23,9 +23,13 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link active" href="/"><i class="fas fa-h-square"></i> Home <span class="sr-only">(current)</span></a>
+                <% if(!currentUser) { %>
                 <a class="nav-item nav-link" href="/auth/register">Sign up</a>
                 <a class="nav-item nav-link" href="/auth/signin">Sign in</a>
+                <% } else { %>
+                <li class="nav-item nav-link" >Signed in as <%= currentUser.username %></li>
                 <a class="nav-item nav-link" href="/auth/signout">Sign out</a>
+                <% } %>
             </div>
         </div>
     </nav>
