@@ -15,7 +15,7 @@ const campgroundRoutes = require("./routes/campground-routes"),
   commentRoutes = require("./routes/comments-routes"),
   indexRoutes = require("./routes/index-routes")
 
-//const User = require("./models/user");
+
 
 
 const app = express();
@@ -41,12 +41,14 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
+
+/**************************************** SETTING UP ROUTES **********************************/
 app.use("/",indexRoutes);
 app.use("/campgrounds",campgroundRoutes);
 app.use("/campgrounds/:id/comments",commentRoutes);
 app.use("/auth",authRoutes);
 
-
+/*********************************************************************************************/
 app.set("view engine", "ejs");
 mongoose.Promise = Promise;
 seedDB();
