@@ -6,7 +6,6 @@ const Campground = require("../models/campground");
 
 //Comments new
 router.get("/new",checkLogin,(req, res) => {
-    console.log("The campground id is:*********** " + req.params.id);
     Campground.findById(req.params.id).then((foundCampground) => {
             res.render("comments/new", {
                 campground: foundCampground
@@ -20,8 +19,6 @@ router.get("/new",checkLogin,(req, res) => {
 //Comments create
 router.post("/",checkLogin,(req, res) => {
     req.body.comment.text = req.sanitize(req.body.comment.text);
-    console.log("Before searching item by id");
-    console.log(req.params.id);
     Campground.findById(req.params.id).then((foundCampground) => {
         Comment.create(req.body.comment).then((createdComment) => {
             // add username and id to comment
