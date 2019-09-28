@@ -49,5 +49,7 @@ router.get("/:id", (req, res) => {
             console.log("An Error happened while retrieving campground ", err);
         });
 });
+//Edit Campground
 
+//Update Campground
 module.exports = router;

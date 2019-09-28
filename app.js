@@ -2,7 +2,8 @@ const express = require("express"),
   bodyParser = require("body-parser"),
   expressSanitizer = require("express-sanitizer"),
   passport = require("passport"),
-  session = require("express-session")
+  session = require("express-session"),
+  methodOverRide = require("method-override")
 
 const mongoose = require("./config/connection"),
   seedDB = require("./seeds"),
@@ -23,7 +24,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
+app.use(methodOverRide("_method"));
 /********************************* PASSPORT CONFIGURATION ***************************************/
 app.use(session({
   secret: keys.session.sessionSecret,
