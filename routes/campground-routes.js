@@ -35,6 +35,8 @@ router.get("/new", (req, res) => {
 
 // Show an individual campground
 router.get("/:id", (req, res) => {
+    console.log("Now in the campground url, checking if the id is passed here or not");
+    console.log("The id is "+ req.params.id);
     Campground.findById(req.params.id).populate("comments").exec()
         .then((searchedCampground) => {
             res.render("campgrounds/show", {

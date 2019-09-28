@@ -31,21 +31,21 @@ async function seedDB() {
         await Comment.deleteMany({});
         console.log("************************ CAMPGROUNDS & COMMENTS REMOVED *********************************");
         //Create campgrounds
-        for (const seed of seeds) {
-            Campground.create(seed).then((createdCampground) => {
-                    // Create comment
-                    Comment.create(comment).then((newComment) => {
-                        createdCampground.comments.push(newComment);
-                        createdCampground.save();
-                    }).catch((err) => {
-                        console.log("An Error occured while creating new comment ", err)
-                    });
+        // for (const seed of seeds) {
+        //     Campground.create(seed).then((createdCampground) => {
+        //             // Create comment
+        //             Comment.create(comment).then((newComment) => {
+        //                 createdCampground.comments.push(newComment);
+        //                 createdCampground.save();
+        //             }).catch((err) => {
+        //                 console.log("An Error occured while creating new comment ", err)
+        //             });
 
-                })
-                .catch((err) => {
-                    console.log("An Error occured while creating a new campground", err);
-                })
-        }
+        //         })
+        //         .catch((err) => {
+        //             console.log("An Error occured while creating a new campground", err);
+        //         })
+        // }
     } catch (error) {
 
     }
