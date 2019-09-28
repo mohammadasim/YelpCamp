@@ -27,7 +27,7 @@
                 <a class="nav-item nav-link" href="/auth/register">Sign up</a>
                 <a class="nav-item nav-link" href="/auth/signin">Sign in</a>
                 <% } else { %>
-                <li class="nav-item nav-link" >Signed in as <%= currentUser.username %></li>
+                <li class="nav-item nav-link" >Signed in As <%= currentUser.username.toUpperCase() %></li>
                 <a class="nav-item nav-link" href="/auth/signout">Sign out</a>
                 <% } %>
             </div>
