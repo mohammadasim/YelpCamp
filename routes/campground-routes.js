@@ -50,6 +50,9 @@ router.get("/:id", (req, res) => {
         });
 });
 //Edit Campground
+router.get("/:id/edit", (req, res) => {
+  res.render("campgrounds/edit")
+});
 
 //Update Campground
 module.exports = router;
