@@ -51,8 +51,24 @@ router.get("/:id", (req, res) => {
 });
 //Edit Campground
 router.get("/:id/edit", (req, res) => {
-  res.render("campgrounds/edit")
+    Campground.findById(req.params.id).then((foundCampground)=>{
+        res.render("campgrounds/edit", {campgroundToBeEdited: foundCampground});
+    }).catch((err)=>{
+        console.log("An Error happened while retreiving campground: ", err);
+    });
 });
 
 //Update Campground
+router.put("/:id", (req,res)=>{
+    Campground.findOneAndUpdate({_id: req.params.id},{
+        name: req.body.name,
+        image: req.body.image,
+        description: req.body.description
+    }).then((updatedCampground)=>{
+        res.redirect("/campgrounds/" + updatedCampground._id);
+    }).catch((err)=>{
+        console.log("An Error happened while updating campground: ", err);
+    })
+});
+
 module.exports = router;
