@@ -70,5 +70,8 @@ router.put("/:id", (req,res)=>{
         console.log("An Error happened while updating campground: ", err);
     })
 });
-
+// Delete Campground
+router.delete("/:id", (req, res)=>{
+    res.send("The delete campground route has been invoked");
+});
 module.exports = router;
