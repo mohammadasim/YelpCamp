@@ -22,7 +22,12 @@
                     <p class="text-danger">
                         <em>Submitted by: <%= searchedCampground.author.username%></em>
                     </p>
+                    <div class="d-flex">
                     <a href="/campgrounds/<%= searchedCampground._id%>/edit" class="btn btn-warning">Edit Campground</a>
+                    <form action="/campgrounds/<%= searchedCampground._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger" id="deletCampground">Delete Campground</button>
+                    </form>
+                </div>
                 </div>
             </div>
             <div class="card bg-light">

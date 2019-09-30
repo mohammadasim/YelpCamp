@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Campground = require("../models/campground");
+const Comment = require("../models/comment");
 const checkLogin = require("../config/middleware");
 
 
@@ -70,8 +71,22 @@ router.put("/:id", (req,res)=>{
         console.log("An Error happened while updating campground: ", err);
     })
 });
-// Delete Campground
+// Delete Campground and associated comments
 router.delete("/:id", (req, res)=>{
-    res.send("The delete campground route has been invoked");
+    Campground.findById(req.params.id, (err, campgroundToBeDeleted)=>{
+        Comment.deleteOne({
+            "_id" : {
+                $in: campgroundToBeDeleted.comments
+            }
+        }).then(()=>{
+            Campground.deleteOne(campgroundToBeDeleted).then(()=>{
+                res.redirect("/campgrounds");
+            }).catch((err) =>{
+                console.log("An error happened while deleting campground: ", err);
+            })
+        }).catch((err)=>{
+            console.log("An error happened while deleting comments associated with campground: ", err);
+        })
+    })
 });
 module.exports = router;

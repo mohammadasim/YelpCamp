@@ -28,3 +28,6 @@ body {
 .img-thumbnail .caption{
     padding: 10px;
 }
+#deletCampground {
+    margin-left: 10px;
+}
