@@ -19,7 +19,6 @@ router.get("/", (req, res) => {
 
 //Create new campground
 router.post("/",checkLogin,(req, res) => {
-    console.log(req.user);
     Campground.create({
         name: req.body.name,
         image: req.body.image,
@@ -73,20 +72,14 @@ router.put("/:id", (req,res)=>{
 });
 // Delete Campground and associated comments
 router.delete("/:id", (req, res)=>{
-    Campground.findById(req.params.id, (err, campgroundToBeDeleted)=>{
-        Comment.deleteOne({
-            "_id" : {
-                $in: campgroundToBeDeleted.comments
-            }
-        }).then(()=>{
-            Campground.deleteOne(campgroundToBeDeleted).then(()=>{
-                res.redirect("/campgrounds");
-            }).catch((err) =>{
-                console.log("An error happened while deleting campground: ", err);
-            })
-        }).catch((err)=>{
-            console.log("An error happened while deleting comments associated with campground: ", err);
+    Campground.findById(req.params.id).then((campgroundToBeDeleted)=>{
+        // Two step removing process was undertaken to ensure the pre middleware in the campground model is invoked
+        campgroundToBeDeleted.delete().then(()=>{
+            res.redirect("/campgrounds");
         })
+    }).catch((err)=>{
+        console.log("An Error happened while deleting a campground: ", err);
+        res.redirect("/campgrounds");
     })
 });
 module.exports = router;
