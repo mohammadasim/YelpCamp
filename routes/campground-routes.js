@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const Campground = require("../models/campground");
 const Comment = require("../models/comment");
-const checkLogin = require("../config/middleware");
+const middleware = require("../config/middleware");
+const isLoggedIn = middleware.isLoggedIn;
+const checkCampgroundOwnership = middleware.checkCampgroundOwnership;
 
 
 // Show all campgrounds
@@ -18,7 +20,7 @@ router.get("/", (req, res) => {
 });
 
 //Create new campground
-router.post("/",checkLogin,(req, res) => {
+router.post("/",isLoggedIn,(req, res) => {
     Campground.create({
         name: req.body.name,
         image: req.body.image,
@@ -32,7 +34,7 @@ router.post("/",checkLogin,(req, res) => {
 });
 
 //Form for creating new campground
-router.get("/new",checkLogin,(req, res) => {
+router.get("/new",isLoggedIn,(req, res) => {
     res.render("campgrounds/new");
 });
 
@@ -50,7 +52,8 @@ router.get("/:id", (req, res) => {
         });
 });
 //Edit Campground
-router.get("/:id/edit", (req, res) => {
+router.get("/:id/edit",checkCampgroundOwnership,(req, res) => {
+    console.log("the edit url has been called");
     Campground.findById(req.params.id).then((foundCampground)=>{
         res.render("campgrounds/edit", {campgroundToBeEdited: foundCampground});
     }).catch((err)=>{
@@ -59,7 +62,7 @@ router.get("/:id/edit", (req, res) => {
 });
 
 //Update Campground
-router.put("/:id", (req,res)=>{
+router.put("/:id",checkCampgroundOwnership,(req,res)=>{
     Campground.findOneAndUpdate({_id: req.params.id},{
         name: req.body.name,
         image: req.body.image,
@@ -71,7 +74,7 @@ router.put("/:id", (req,res)=>{
     })
 });
 // Delete Campground and associated comments
-router.delete("/:id", (req, res)=>{
+router.delete("/:id",checkCampgroundOwnership,(req, res)=>{
     Campground.findById(req.params.id).then((campgroundToBeDeleted)=>{
         // Two step removing process was undertaken to ensure the pre middleware in the campground model is invoked
         campgroundToBeDeleted.delete().then(()=>{

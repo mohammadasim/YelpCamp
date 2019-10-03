@@ -1,11 +1,12 @@
 const router = require('express').Router({mergeParams: true});
 const Comment = require("../models/comment");
-const checkLogin = require("../config/middleware");
+const middleware = require("../config/middleware");
+const isLoggedIn = middleware.isLoggedIn;
 const Campground = require("../models/campground");
 
 
 //Comments new
-router.get("/new",checkLogin,(req, res) => {
+router.get("/new",isLoggedIn,(req, res) => {
     Campground.findById(req.params.id).then((foundCampground) => {
             res.render("comments/new", {
                 campground: foundCampground
@@ -17,7 +18,7 @@ router.get("/new",checkLogin,(req, res) => {
 });
 
 //Comments create
-router.post("/",checkLogin,(req, res) => {
+router.post("/",isLoggedIn,(req, res) => {
     req.body.comment.text = req.sanitize(req.body.comment.text);
     Campground.findById(req.params.id).then((foundCampground) => {
         Comment.create(req.body.comment).then((createdComment) => {

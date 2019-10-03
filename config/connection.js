@@ -6,7 +6,9 @@ var DATABASE_URL = keys.mongodb.mongodb_url;
 mongoose.Promise = global.Promise;
 mongoose.connect(DATABASE_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
   });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
