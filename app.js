@@ -3,7 +3,8 @@ const express = require("express"),
   expressSanitizer = require("express-sanitizer"),
   passport = require("passport"),
   session = require("express-session"),
-  methodOverRide = require("method-override")
+  methodOverRide = require("method-override"),
+  flash = require("connect-flash")
 
 const mongoose = require("./config/connection"),
   seedDB = require("./seeds"),
@@ -34,6 +35,7 @@ app.use(session({
     secure: false
   }
 }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 /**********************************************************************************************/
