@@ -55,21 +55,16 @@ router.get("/:comment_id/edit", (req, res) => {
 
 });
 
-//Edit comment Put route
-router.put("/:comment_id", (req, res) => {
-    req.body.comment.text = req.sanitize(req.body.comment.text);
-    Comment.findById(req.params.comment_id).then((foundComment) => {
-        foundComment.text = req.body.comment.text;
-        foundComment.save().then((updatedComment) => {
-            res.redirect("/campgrounds/" + req.params.id);
-        }).catch((err) => {
-            console.log("An Error happened while updating comment: ", err);
-        })
-    }).catch((err) => {
-        console.log("An Error happened while retrieving comment: ", err);
+//Update comment Put route
+router.put("/:comment_id", (req, res)=>{
+    // check the answer to this sof question: https://stackoverflow.com/questions/32811510/mongoose-findoneandupdate-doesnt-return-updated-document
+    Comment.findOneAndUpdate(req.params.comment_id, {text:req.body.comment.text}, ()=>{
+        res.redirect("/campgrounds/" + req.params.id);
+    }).catch((err)=>{
+        console.log("An Error has occured while updating comment: ",err);
+        res.redirect("back");
     });
 });
-
 //Delete comment
 router.delete("/:comment_id", (req, res)=>{
     Campground.findById(req.params.id).then((foundCampground)=>{
