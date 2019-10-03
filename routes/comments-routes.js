@@ -5,6 +5,7 @@ const Comment = require("../models/comment");
 const middleware = require("../config/middleware");
 const isLoggedIn = middleware.isLoggedIn;
 const Campground = require("../models/campground");
+const removeComment = require("../config/helper");
 
 
 //Comments new
@@ -69,5 +70,16 @@ router.put("/:comment_id", (req, res) => {
     });
 });
 
+//Delete comment
+router.delete("/:comment_id", (req, res)=>{
+    Campground.findById(req.params.id).then((foundCampground)=>{
+        foundCampground.comments = removeComment(foundCampground.comments, req.params.comment_id);
+        foundCampground.save().then(()=>{
+           Comment.findOneAndDelete(req.params.comment_id).then(()=>{
+               res.redirect("/campgrounds/" + req.params.id);
+           }) 
+        })
+    })
+});
 
 module.exports = router;

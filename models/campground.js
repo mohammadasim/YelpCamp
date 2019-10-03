@@ -15,7 +15,7 @@ var campgroundSchema = mongoose.Schema({
   }]
 });
 //pre function for campgroundSchema called before we remove a campground
-campgroundSchema.pre('remove', async function (next) {
+campgroundSchema.pre('remove', async (next)=> {
   try {
     await Comment.deleteOne({
       "_id": {

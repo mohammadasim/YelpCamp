@@ -48,9 +48,15 @@
                                 <span class="text-muted"> 10 days ago</span>
                             </div>
                             <p><%- comment.text %></p>
-                            <a href="/campgrounds/<%= searchedCampground._id %>/comments/<%= comment._id%>/edit">
-                                <i class="fas fa-edit"></i></a>
-                            <i class="far fa-trash-alt"></i>
+                            <div class="d-flex">
+                                <a href="/campgrounds/<%= searchedCampground._id %>/comments/<%= comment._id%>/edit">
+                                    <i class="fas fa-edit"></i></a>
+                                <form
+                                    action="/campgrounds/<%= searchedCampground._id %>/comments/<%= comment._id %>?_method=DELETE"
+                                    method="POST" id="comment_delete">
+                                    <a href="javascript:{}" onclick="document.getElementById('comment_delete').submit(); return false;"><i class="far fa-trash-alt"></i></a>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <% } %>

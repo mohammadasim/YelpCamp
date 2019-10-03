@@ -10,6 +10,5 @@ var commentSchema = mongoose.Schema({
       username: String
     }
   });
-  
   // Export module
   module.exports = mongoose.model('Comment', commentSchema);
