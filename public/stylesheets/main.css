@@ -30,4 +30,8 @@ body {
 }
 .delete_icon {
     margin-left: 10px;
+    color: red;
+}
+.edit_icon {  
+    color: #FFD700;
 }
