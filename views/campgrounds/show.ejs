@@ -24,10 +24,9 @@
                     </p>
                     <div class="d-flex">
                         <% if(currentUser && searchedCampground.author._id.equals(currentUser.id)) { %>
-                        <a href="/campgrounds/<%= searchedCampground._id%>/edit" class="btn btn-warning">Edit
-                            Campground</a>
-                        <form action="/campgrounds/<%= searchedCampground._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger" id="deletCampground">Delete Campground</button>
+                        <a href="/campgrounds/<%= searchedCampground._id%>/edit"><i class="fas fa-edit"></i></a>
+                        <form action="/campgrounds/<%= searchedCampground._id%>?_method=DELETE" method="POST" id="campground_delete">
+                            <a href="javascript:{}" onclick="document.getElementById('campground_delete').submit(); return false;"><i class="far fa-trash-alt delete_icon"></i></a>
                         </form>
                         <% } %>
                     </div>
@@ -48,15 +47,17 @@
                                 <span class="text-muted"> 10 days ago</span>
                             </div>
                             <p><%- comment.text %></p>
+                            <% if(currentUser && comment.author.id.equals(currentUser.id)) { %>
                             <div class="d-flex">
                                 <a href="/campgrounds/<%= searchedCampground._id %>/comments/<%= comment._id%>/edit">
                                     <i class="fas fa-edit"></i></a>
                                 <form
                                     action="/campgrounds/<%= searchedCampground._id %>/comments/<%= comment._id %>?_method=DELETE"
                                     method="POST" id="comment_delete">
-                                    <a href="javascript:{}" onclick="document.getElementById('comment_delete').submit(); return false;"><i class="far fa-trash-alt"></i></a>
+                                    <a href="javascript:{}" onclick="document.getElementById('comment_delete').submit(); return false;"><i class="far fa-trash-alt delete_icon"></i></a>
                                 </form>
                             </div>
+                            <% } %>
                         </div>
                     </div>
                     <% } %>
