@@ -53,7 +53,6 @@ router.get("/:id", (req, res) => {
 });
 //Edit Campground
 router.get("/:id/edit",checkCampgroundOwnership,(req, res) => {
-    console.log("the edit url has been called");
     Campground.findById(req.params.id).then((foundCampground)=>{
         res.render("campgrounds/edit", {campgroundToBeEdited: foundCampground});
     }).catch((err)=>{
