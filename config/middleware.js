@@ -1,4 +1,5 @@
 const Campground = require("../models/campground");
+const Comment = require("../models/comment")
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -23,7 +24,22 @@ function checkCampgroundOwnership(req, res, next) {
     }
 }
 
+function checkCommentAuthor(req, res, next){
+    if(req.isAuthenticated()){
+        Comment.findById(req.params.comment_id).then((foundComment)=>{
+            if(foundComment.author.id.equals(req.user._id)){
+                next()
+            } else{
+                res.redirect("back");
+            }
+        });
+    }else{
+        res.redirect("/");
+    }
+}
+
 module.exports = {
     isLoggedIn: isLoggedIn,
-    checkCampgroundOwnership: checkCampgroundOwnership
+    checkCampgroundOwnership: checkCampgroundOwnership,
+    checkCommentAuthor: checkCommentAuthor
 }

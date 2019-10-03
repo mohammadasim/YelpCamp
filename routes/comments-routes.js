@@ -6,6 +6,7 @@ const middleware = require("../config/middleware");
 const isLoggedIn = middleware.isLoggedIn;
 const Campground = require("../models/campground");
 const removeComment = require("../config/helper");
+const checkCommentAuthor = middleware.checkCommentAuthor;
 
 
 //Comments new
@@ -43,7 +44,7 @@ router.post("/", isLoggedIn, (req, res) => {
     })
 });
 //Edit Comment Form
-router.get("/:comment_id/edit", (req, res) => {
+router.get("/:comment_id/edit",checkCommentAuthor,(req, res) => {
     Comment.findById(req.params.comment_id).then((foundComment) => {
         res.render("comments/edit", {
             campground_id: req.params.id,
@@ -56,17 +57,19 @@ router.get("/:comment_id/edit", (req, res) => {
 });
 
 //Update comment Put route
-router.put("/:comment_id", (req, res)=>{
+router.put("/:comment_id",checkCommentAuthor,(req, res)=>{
+    console.log("the edit url has been invoked!")
     // check the answer to this sof question: https://stackoverflow.com/questions/32811510/mongoose-findoneandupdate-doesnt-return-updated-document
-    Comment.findOneAndUpdate(req.params.comment_id, {text:req.body.comment.text}, ()=>{
+    Comment.findOneAndUpdate(req.params.comment_id, {text:req.body.comment.text}).then((updatedComment)=>{
         res.redirect("/campgrounds/" + req.params.id);
-    }).catch((err)=>{
+    })
+    .catch((err)=>{
         console.log("An Error has occured while updating comment: ",err);
         res.redirect("back");
     });
 });
 //Delete comment
-router.delete("/:comment_id", (req, res)=>{
+router.delete("/:comment_id",checkCommentAuthor,(req, res)=>{
     Campground.findById(req.params.id).then((foundCampground)=>{
         foundCampground.comments = removeComment(foundCampground.comments, req.params.comment_id);
         foundCampground.save().then(()=>{
