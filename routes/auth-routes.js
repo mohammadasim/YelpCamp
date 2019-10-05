@@ -9,11 +9,12 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
+
   var newUser = new User({username: req.body.username});
   User.register(newUser, req.body.password,(err, user)=>{
     if(err){
-      console.log("An error occured while creating new user: ", err);
-      res.redirect("/register");
+      req.flash("error", err.message);
+      res.redirect("/auth/register");
     }
     else{
       passport.authenticate("local")(req,res, ()=>{
