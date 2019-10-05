@@ -5,6 +5,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
+    req.flash("error", "You need to be logged in to do that");
     res.redirect("/auth/signin");
 }
 
@@ -16,10 +17,12 @@ function checkCampgroundOwnership(req, res, next) {
             if (foundCampground.author.equals(req.user._id)) {
                 next();
             } else {
+                req.flash("error", "Only Campground owners can delete their campgrounds");
                 res.redirect("back");
             }
         })
     } else {
+        req.flash("error", "You need to be logged in to do that");
         res.redirect("/");
     }
 }
@@ -30,10 +33,12 @@ function checkCommentAuthor(req, res, next){
             if(foundComment.author.id.equals(req.user._id)){
                 next()
             } else{
+                req.flash("error", "Only comment authors can update or delete their comments");
                 res.redirect("back");
             }
         });
     }else{
+        req.flash("error", "You need to be logged in to do that");
         res.redirect("/");
     }
 }

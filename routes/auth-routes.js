@@ -17,6 +17,7 @@ router.post("/register", (req, res) => {
     }
     else{
       passport.authenticate("local")(req,res, ()=>{
+        req.flash("success", "Successfully signed up");
         res.redirect("/campgrounds/");
       })
     }
@@ -24,7 +25,7 @@ router.post("/register", (req, res) => {
 });
 
 router.get("/signin", (req, res) => {
-  res.render("auth/signin")
+  res.render("auth/signin");
 });
 router.post("/signin", passport.authenticate("local", {
   successRedirect: "/campgrounds/",
@@ -33,6 +34,7 @@ router.post("/signin", passport.authenticate("local", {
 
 router.get("/signout", (req, res) => {
   req.logOut();
+  req.flash("success", "Successfully signed out");
   res.redirect("/");
 });
 

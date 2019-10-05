@@ -67,6 +67,7 @@ router.put("/:id",checkCampgroundOwnership,(req,res)=>{
         image: req.body.image,
         description: req.body.description
     }).then((updatedCampground)=>{
+        req.flash("success", "Campground successfully updated");
         res.redirect("/campgrounds/" + updatedCampground._id);
     }).catch((err)=>{
         console.log("An Error happened while updating campground: ", err);
@@ -77,6 +78,7 @@ router.delete("/:id",checkCampgroundOwnership,(req, res)=>{
     Campground.findById(req.params.id).then((campgroundToBeDeleted)=>{
         // Two step removing process was undertaken to ensure the pre middleware in the campground model is invoked
         campgroundToBeDeleted.delete().then(()=>{
+            req.flash("success", "Campground successfully deleted");
             res.redirect("/campgrounds");
         })
     }).catch((err)=>{
