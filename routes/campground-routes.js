@@ -23,6 +23,7 @@ router.get("/", (req, res) => {
 router.post("/", isLoggedIn, (req, res) => {
     Campground.create({
         name: req.body.name,
+        price: req.body.price,
         image: req.body.image,
         description: req.body.description,
         author: req.user
@@ -75,6 +76,7 @@ router.put("/:id", checkCampgroundOwnership, (req, res) => {
     }, {
         name: req.body.name,
         image: req.body.image,
+        price: req.body.price,
         description: req.body.description
     }).then((updatedCampground) => {
         req.flash("success", "Campground successfully updated");
