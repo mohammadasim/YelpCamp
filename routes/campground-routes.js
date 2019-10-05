@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 });
 
 //Create new campground
-router.post("/",isLoggedIn,(req, res) => {
+router.post("/", isLoggedIn, (req, res) => {
     Campground.create({
         name: req.body.name,
         image: req.body.image,
@@ -34,7 +34,7 @@ router.post("/",isLoggedIn,(req, res) => {
 });
 
 //Form for creating new campground
-router.get("/new",isLoggedIn,(req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("campgrounds/new");
 });
 
@@ -42,46 +42,56 @@ router.get("/new",isLoggedIn,(req, res) => {
 router.get("/:id", (req, res) => {
     Campground.findById(req.params.id).populate("comments").populate("author").exec()
         .then((searchedCampground) => {
-            res.render("campgrounds/show", {
-                searchedCampground: searchedCampground
-            });
-
+            if (!searchedCampground) {
+                req.flash("error", "Campground not found");
+                res.redirect("back");
+            } else {
+                res.render("campgrounds/show", {
+                    searchedCampground: searchedCampground
+                });
+            }
         })
         .catch((err) => {
             console.log("An Error happened while retrieving campground ", err);
+            req.flash("error", "Invalid camground ID provided");
+            res.redirect("back");
         });
 });
 //Edit Campground
-router.get("/:id/edit",checkCampgroundOwnership,(req, res) => {
-    Campground.findById(req.params.id).then((foundCampground)=>{
-        res.render("campgrounds/edit", {campgroundToBeEdited: foundCampground});
-    }).catch((err)=>{
+router.get("/:id/edit", checkCampgroundOwnership, (req, res) => {
+    Campground.findById(req.params.id).then((foundCampground) => {
+        res.render("campgrounds/edit", {
+            campgroundToBeEdited: foundCampground
+        });
+    }).catch((err) => {
         console.log("An Error happened while retreiving campground: ", err);
     });
 });
 
 //Update Campground
-router.put("/:id",checkCampgroundOwnership,(req,res)=>{
-    Campground.findOneAndUpdate({_id: req.params.id},{
+router.put("/:id", checkCampgroundOwnership, (req, res) => {
+    Campground.findOneAndUpdate({
+        _id: req.params.id
+    }, {
         name: req.body.name,
         image: req.body.image,
         description: req.body.description
-    }).then((updatedCampground)=>{
+    }).then((updatedCampground) => {
         req.flash("success", "Campground successfully updated");
         res.redirect("/campgrounds/" + updatedCampground._id);
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log("An Error happened while updating campground: ", err);
     })
 });
 // Delete Campground and associated comments
-router.delete("/:id",checkCampgroundOwnership,(req, res)=>{
-    Campground.findById(req.params.id).then((campgroundToBeDeleted)=>{
+router.delete("/:id", checkCampgroundOwnership, (req, res) => {
+    Campground.findById(req.params.id).then((campgroundToBeDeleted) => {
         // Two step removing process was undertaken to ensure the pre middleware in the campground model is invoked
-        campgroundToBeDeleted.delete().then(()=>{
+        campgroundToBeDeleted.delete().then(() => {
             req.flash("success", "Campground successfully deleted");
             res.redirect("/campgrounds");
         })
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log("An Error happened while deleting a campground: ", err);
         res.redirect("/campgrounds");
     })

@@ -32,14 +32,19 @@ function checkCampgroundOwnership(req, res, next) {
 
 function checkCommentAuthor(req, res, next) {
     if (req.isAuthenticated()) {
-        Comment.findById(req.params.comment_id).then((foundComment) => {
-            if (foundComment.author.id.equals(req.user._id)) {
-                next()
-            } else {
-                req.flash("error", "Only comment authors can update or delete their comments");
+        Comment.findById(req.params.comment_id, (err, foundComment) => {
+            if (err || !foundComment) {
+                req.flash("error", "Wrong Comment ID provided");
                 res.redirect("back");
+            } else {
+                if (foundComment.author.id.equals(req.user._id)) {
+                    next()
+                } else {
+                    req.flash("error", "Only comment authors can update or delete their comments");
+                    res.redirect("back");
+                }
             }
-        });
+        })
     } else {
         req.flash("error", "You need to be logged in to do that");
         res.redirect("/");
