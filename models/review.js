@@ -28,9 +28,8 @@ const reviewSchema = new mongoose.Schema({
     campground: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Campground"
-    },
-    // if timestamps are set to true, mongoose assigns createdAt and updatedAt fields to your schema, the type assigned is Date.
-    timestamps: true
+    }
 });
-
-module.exports = mongoose.model("Reviews", reviewSchema);
+// the following will add createdAt and updatedAt timestamps, check SOF https://stackoverflow.com/questions/12669615/add-created-at-and-updated-at-fields-to-mongoose-schemas
+reviewSchema.set('timestamps', true);
+module.exports = mongoose.model("Review", reviewSchema);

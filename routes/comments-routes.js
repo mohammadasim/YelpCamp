@@ -5,16 +5,22 @@ const Comment = require("../models/comment");
 const middleware = require("../config/middleware");
 const isLoggedIn = middleware.isLoggedIn;
 const Campground = require("../models/campground");
-const removeComment = require("../config/helper");
+const helper = require("../config/helper");
+const removeComment = helper.removeComment;
 const checkCommentAuthor = middleware.checkCommentAuthor;
 
 
 //Comments new
 router.get("/new", isLoggedIn, (req, res) => {
     Campground.findById(req.params.id).then((foundCampground) => {
+        if(!foundCampground){
+            req.flash("error", "Campground not found");
+            res.redirect("/campgrounds");
+        } else{
             res.render("comments/new", {
                 campground: foundCampground
             });
+        }
         })
         .catch((err) => {
             console.log("An Error occured while finding campground:", err);

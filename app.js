@@ -15,7 +15,8 @@ const mongoose = require("./config/connection"),
 const campgroundRoutes = require("./routes/campground-routes"),
   authRoutes = require("./routes/auth-routes"),
   commentRoutes = require("./routes/comments-routes"),
-  indexRoutes = require("./routes/index-routes")
+  indexRoutes = require("./routes/index-routes"),
+  reviewRoutes = require("./routes/review-routes")
 
 
 
@@ -52,6 +53,7 @@ app.use("/",indexRoutes);
 app.use("/campgrounds",campgroundRoutes);
 app.use("/campgrounds/:id/comments",commentRoutes);
 app.use("/auth",authRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 /*********************************************************************************************/
 app.set("view engine", "ejs");

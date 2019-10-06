@@ -7,4 +7,17 @@ function removeComment(arr, id){
     }
     return newArray;
 }
-module.exports = removeComment;
+function calculateAverage(reviews){
+    var sum = 0;
+    if(reviews.length === 0){
+        return sum;
+    }
+    reviews.forEach(function(element){
+       sum +=  element.rating;
+    })
+    return sum/reviews.length
+}
+module.exports = {
+    removeComment: removeComment,
+    calculateAverage: calculateAverage
+}
