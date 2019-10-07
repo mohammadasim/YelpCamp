@@ -41,7 +41,6 @@ router.get("/new", isLoggedIn, (req, res) => {
 
 // Show an individual campground
 router.get("/:id", (req, res) => {
-    console.log('inside the /get url');
     Campground.findById(req.params.id).populate({
         path: "author",
         model: "User"
