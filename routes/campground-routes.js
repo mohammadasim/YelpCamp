@@ -41,17 +41,30 @@ router.get("/new", isLoggedIn, (req, res) => {
 
 // Show an individual campground
 router.get("/:id", (req, res) => {
-    Campground.findById(req.params.id).populate("comments").populate("author").populate({path: "reviews", populate:{path: "review", populate:{path: "author", model: "user"}}}).exec()
-        .then((searchedCampground) => {
-            if (!searchedCampground) {
-                req.flash("error", "Campground not found");
-                res.redirect("back");
-            } else {
-                res.render("campgrounds/show", {
-                    searchedCampground: searchedCampground
-                });
-            }
-        })
+    console.log('inside the /get url');
+    Campground.findById(req.params.id).populate({
+        path: "author",
+        model: "User"
+    }).populate({
+        path: "comments",
+        model: "Comment"
+    }).populate({
+        path: "reviews",
+        model: "Review",
+        populate: {
+            path: "author",
+            model: "User"
+        }
+    }).exec().then((searchedCampground) => {
+        if (!searchedCampground) {
+            req.flash("error", "Campground not found");
+            res.redirect("back");
+        } else {
+            res.render("campgrounds/show", {
+                searchedCampground: searchedCampground
+            });
+        }
+    })
         .catch((err) => {
             console.log("An Error happened while retrieving campground ", err);
             req.flash("error", "Invalid camground ID provided");

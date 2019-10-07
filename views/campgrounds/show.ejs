@@ -10,7 +10,6 @@
             </div>
         </div>
         <div class="col-md-9">
-            <% console.log(searchedCampground) %>
             <div class="img-thumbnail">
 
                 <img src="<%= searchedCampground.image %>" class="img-fluid mx-auto d-block" alt="Campground image">
@@ -94,18 +93,6 @@
                                 <span class="text-muted"> 5 days ago</span>
                             </div>
                             <p><%- review.text %></p>
-                            <% console.log(review.author) %>
-                            <% if(currentUser && review.author.id.equals(currentUser.id)) { %>
-                            <div class="d-flex">
-                                <a href="/campgrounds/<%= searchedCampground._id %>/reviews/<%= review._id%>/edit">
-                                    <i class="fas fa-edit edit_icon"></i></a>
-                                <form
-                                    action="/campgrounds/<%= searchedCampground._id %>/reviews/<%= review._id %>?_method=DELETE"
-                                    method="POST" id="comment_delete">
-                                    <a href="javascript:{}" onclick="document.getElementById('comment_delete').submit(); return false;"><i class="far fa-trash-alt delete_icon"></i></a>
-                                </form>
-                            </div>
-                            <% } %>
                         </div>
                     </div>
                     <% } %>

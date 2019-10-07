@@ -19,11 +19,8 @@ const reviewSchema = new mongoose.Schema({
     },
     // author id and username fields
     author: {
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
-        },
-        username: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
     campground: {
         type: mongoose.Schema.Types.ObjectId,

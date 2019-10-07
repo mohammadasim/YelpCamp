@@ -76,7 +76,7 @@ function checkReviewAuthor(req, res, next){
 
 function checkReviewExistance(req, res, next){
     if(req.isAuthenticated()){
-        Campground.findById(req.params.id).populuate({path: "reviews", populate:{path: "review"}}).exec((err,foundCampground)=>{
+        Campground.findById(req.params.id).populate({path: "reviews", populate:{path: "review"}}).exec((err,foundCampground)=>{
             if(err || !foundCampground){
                 req.flash("error", "Camground no found");
                 res.redirect("/campgrounds");
@@ -88,7 +88,7 @@ function checkReviewExistance(req, res, next){
                 });
                 if(foundUserReview){
                     req.flash("error", "You have already reviewed this campground");
-                    req.redirect("/campgrounds");
+                    res.redirect("/campgrounds");
                 }else{
                     next();
                 }

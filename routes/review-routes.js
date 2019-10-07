@@ -5,7 +5,8 @@ const Campground = require("../models/campground"),
   Review = require("../models/review"),
   helper = require("../config/helper"),
   middleware = require("../config/middleware"),
-  calculateAverage = helper.calculateAverage
+  calculateAverage = helper.calculateAverage,
+  User = require("../models/user")
 
 const isLoggedIn = middleware.isLoggedIn;
 const checkReviewExistence = middleware.checkReviewExistance;
@@ -16,7 +17,7 @@ router.get("/", (req, res) => {
 });
 
 // form for new review
-router.get("/new", isLoggedIn,(req, res) => {
+router.get("/new", isLoggedIn, checkReviewExistence,(req, res) => {
   Campground.findById(req.params.id).then((foundCampground) => {
     if (!foundCampground) {
       req.flash("error", "Campground not found");
@@ -32,7 +33,7 @@ router.get("/new", isLoggedIn,(req, res) => {
 });
 
 //Create new review
-router.post("/", isLoggedIn, checkReviewExistence,(req, res) => {
+router.post("/", isLoggedIn, checkReviewExistence, (req, res) => {
   Campground.findById(req.params.id).then((foundCampground) => {
     if (!foundCampground) {
       req.flash("error", "Campground not found");
@@ -42,29 +43,32 @@ router.post("/", isLoggedIn, checkReviewExistence,(req, res) => {
         rating: parseInt(req.body.rating),
         text: req.body.text,
       }).then((newReview) => {
-        // Add author and Campground to review
-        newReview.author._id = req.user._id;
-        newReview.author.username = req.user.username;
-        newReview.campground = foundCampground;
-        // Save review
-        newReview.save().then((reviewWithUserAndCampground)=>{
-          // Add review to Campground
-          foundCampground.reviews.push(reviewWithUserAndCampground);
-          // Populate review to retrieve review rating
-          foundCampground.populate({path: "reviews", populate:{path: "review"}}).execPopulate().then((campground)=>{
-            campground.rating = calculateAverage(campground.reviews);
-            campground.save().then((updatedCampground)=>{
-              req.flash("success", "Review successfully added");
-              res.redirect("/campgrounds/"+updatedCampground._id);
-            }).catch((err)=>{
-              req.flash("error", err.message);
-              res.redirect("/campgrounds");
-            });
+        // Find the Author for the review
+        User.findById(req.user._id).then((reviewAuther) => {
+          newReview.author = reviewAuther;
+          newReview.campground = foundCampground;
+          newReview.save().then((reviewWithUserAndCampground) => {
+            // Add review to Campground
+            foundCampground.reviews.push(reviewWithUserAndCampground);
+            // Populate review to retrieve review rating
+            foundCampground.populate({ path: "reviews", populate: { path: "review" } }).execPopulate().then((campground) => {
+              campground.rating = calculateAverage(campground.reviews);
+              campground.save().then((updatedCampground) => {
+                req.flash("success", "Review successfully added");
+                res.redirect("/campgrounds/" + updatedCampground._id);
+              }).catch((err) => {
+                req.flash("error", err.message);
+                res.redirect("/campgrounds");
+              });
+            })
+          }).catch((err) => {
+            req.flash("error", err.message);
+            res.redirect("/campgrounds");
           });
-        }).catch((err)=>{
+        }).catch((err) => {
           req.flash("error", err.message);
           res.redirect("/campgrounds");
-        })
+        });
       }).catch((err) => {
         console.log("An error has happened while creating new review:", err);
         req.flash("error", err.message);
