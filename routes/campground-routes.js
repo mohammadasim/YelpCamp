@@ -41,7 +41,7 @@ router.get("/new", isLoggedIn, (req, res) => {
 
 // Show an individual campground
 router.get("/:id", (req, res) => {
-    Campground.findById(req.params.id).populate("comments").populate("author").exec()
+    Campground.findById(req.params.id).populate("comments").populate("author").populate({path: "reviews", populate:{path: "review", populate:{path: "author", model: "user"}}}).exec()
         .then((searchedCampground) => {
             if (!searchedCampground) {
                 req.flash("error", "Campground not found");

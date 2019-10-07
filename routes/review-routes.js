@@ -8,6 +8,9 @@ const Campground = require("../models/campground"),
   calculateAverage = helper.calculateAverage
 
 const isLoggedIn = middleware.isLoggedIn;
+const checkReviewExistence = middleware.checkReviewExistance;
+
+
 router.get("/", (req, res) => {
   res.send("You have called the review index route");
 });
@@ -29,7 +32,7 @@ router.get("/new", isLoggedIn,(req, res) => {
 });
 
 //Create new review
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", isLoggedIn, checkReviewExistence,(req, res) => {
   Campground.findById(req.params.id).then((foundCampground) => {
     if (!foundCampground) {
       req.flash("error", "Campground not found");

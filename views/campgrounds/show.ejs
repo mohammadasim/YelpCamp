@@ -10,6 +10,7 @@
             </div>
         </div>
         <div class="col-md-9">
+            <% console.log(searchedCampground) %>
             <div class="img-thumbnail">
 
                 <img src="<%= searchedCampground.image %>" class="img-fluid mx-auto d-block" alt="Campground image">
@@ -30,6 +31,14 @@
                         </form>
                         <% } %>
                     </div>
+                    <p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star <% if (searchedCampground.rating > 1.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (searchedCampground.rating > 2.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (searchedCampground.rating > 3.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (searchedCampground.rating > 4.5) { %> checked <% } %>"></span>
+                        <em>(total reviews: <%= searchedCampground.reviews.length %>)</em>
+                    </p>
                 </div>
             </div>
             <div class="card bg-light">
@@ -63,6 +72,48 @@
                     <% } %>
                 </div>
             </div>
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="text-right">
+                        <a class="btn btn-success" href="/campgrounds/<%= searchedCampground._id%>/reviews/new">Add New
+                            Review</a>
+                    </div>
+                    <hr>
+                    <% for(var review of searchedCampground.reviews ){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between">
+                                <strong><i class="fas fa-user"></i> <%= review.author.username %></strong>
+                                <p>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star <% if (review.rating > 1.5) { %> checked <% } %>"></span>
+                                    <span class="fa fa-star <% if (review.rating > 2.5) { %> checked <% } %>"></span>
+                                    <span class="fa fa-star <% if (review.rating > 3.5) { %> checked <% } %>"></span>
+                                    <span class="fa fa-star <% if (review.rating > 4.5) { %> checked <% } %>"></span>
+                                </p>
+                                <span class="text-muted"> 5 days ago</span>
+                            </div>
+                            <p><%- review.text %></p>
+                            <% console.log(review.author) %>
+                            <% if(currentUser && review.author.id.equals(currentUser.id)) { %>
+                            <div class="d-flex">
+                                <a href="/campgrounds/<%= searchedCampground._id %>/reviews/<%= review._id%>/edit">
+                                    <i class="fas fa-edit edit_icon"></i></a>
+                                <form
+                                    action="/campgrounds/<%= searchedCampground._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                    method="POST" id="comment_delete">
+                                    <a href="javascript:{}" onclick="document.getElementById('comment_delete').submit(); return false;"><i class="far fa-trash-alt delete_icon"></i></a>
+                                </form>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 </div>
