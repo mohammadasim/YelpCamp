@@ -111,6 +111,18 @@
                                 <span class="text-muted"> 5 days ago</span>
                             </div>
                             <p><%- review.text %></p>
+                            <div class="d-flex">
+                                    <% if(currentUser && review.author._id.equals(currentUser.id)) { %>
+                                    <a href="/campgrounds/<%= searchedCampground._id%>/reviews/<%= review._id %>edit"><i
+                                            class="fas fa-edit edit_icon"></i></a>
+                                    <form action="/campgrounds/<%= searchedCampground._id%>/reviews/<%= review._id %>?_method=DELETE" method="POST"
+                                        id="campground_delete">
+                                        <a href="javascript:{}"
+                                            onclick="document.getElementById('campground_delete').submit(); return false;"><i
+                                                class="far fa-trash-alt delete_icon"></i></a>
+                                    </form>
+                                    <% } %>
+                                </div>
                         </div>
                     </div>
                     <% } %>
