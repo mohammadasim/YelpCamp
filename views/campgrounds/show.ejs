@@ -16,7 +16,8 @@
                 <div class="caption">
                     <div class="d-flex justify-content-between">
                         <h4 class="text-primary"><a><%= searchedCampground.name %></a></h4>
-                        <h4 class="figure-caption text-right"><strong>£<%= searchedCampground.price %>/night</strong></h4>
+                        <h4 class="figure-caption text-right"><strong>£<%= searchedCampground.price %>/night</strong>
+                        </h4>
                     </div>
                     <p><%- searchedCampground.description %></p>
                     <p>
@@ -24,20 +25,36 @@
                     </p>
                     <div class="d-flex">
                         <% if(currentUser && searchedCampground.author._id.equals(currentUser.id)) { %>
-                        <a href="/campgrounds/<%= searchedCampground._id%>/edit"><i class="fas fa-edit edit_icon"></i></a>
-                        <form action="/campgrounds/<%= searchedCampground._id%>?_method=DELETE" method="POST" id="campground_delete">
-                            <a href="javascript:{}" onclick="document.getElementById('campground_delete').submit(); return false;"><i class="far fa-trash-alt delete_icon"></i></a>
+                        <a href="/campgrounds/<%= searchedCampground._id%>/edit"><i
+                                class="fas fa-edit edit_icon"></i></a>
+                        <form action="/campgrounds/<%= searchedCampground._id%>?_method=DELETE" method="POST"
+                            id="campground_delete">
+                            <a href="javascript:{}"
+                                onclick="document.getElementById('campground_delete').submit(); return false;"><i
+                                    class="far fa-trash-alt delete_icon"></i></a>
                         </form>
                         <% } %>
                     </div>
-                    <p>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star <% if (searchedCampground.rating > 1.5) { %> checked <% } %>"></span>
-                        <span class="fa fa-star <% if (searchedCampground.rating > 2.5) { %> checked <% } %>"></span>
-                        <span class="fa fa-star <% if (searchedCampground.rating > 3.5) { %> checked <% } %>"></span>
-                        <span class="fa fa-star <% if (searchedCampground.rating > 4.5) { %> checked <% } %>"></span>
-                        <em>(total reviews: <%= searchedCampground.reviews.length %>)</em>
-                    </p>
+                    <% if(searchedCampground.rating === 0) { %>
+                    <div class="star-rating">
+                        <span class="fa fa-star fa-fw"></span>
+                        <span class="fa fa-star fa-fw"></span>
+                        <span class="fa fa-star fa-fw"></span>
+                        <span class="fa fa-star fa-fw"></span>
+                        <span class="fa fa-star fa-fw"></span>
+                    </div>
+                    <em>(total reviews: <%= searchedCampground.reviews.length %>)</em>
+                    <% } else { %>
+                    <% console.log(searchedCampground.rating)%>
+                    <div class="star-rating">
+                        <span class="fa fa-star fa-fw" style="color:#FFD700;"></span>
+                        <span class="fa fa-star fa-fw" <% if(searchedCampground.rating > 1.5) { %> style="color:#FFD700;" <% } %> ></span>
+                        <span class="fa fa-star fa-fw" <% if(searchedCampground.rating > 2.5) { %> style="color:#FFD700;" <% } %> ></span>
+                        <span class="fa fa-star fa-fw" <% if(searchedCampground.rating > 3.5) { %> style="color:#FFD700;" <% } %> ></span>
+                        <span class="fa fa-star fa-fw" <% if(searchedCampground.rating > 4.5) { %> style="color:#FFD700;" <% } %> ></span>
+                    </div>
+                    <em>(total reviews: <%= searchedCampground.reviews.length %>)</em>
+                    <% } %>
                 </div>
             </div>
             <div class="card bg-light">
@@ -62,7 +79,9 @@
                                 <form
                                     action="/campgrounds/<%= searchedCampground._id %>/comments/<%= comment._id %>?_method=DELETE"
                                     method="POST" id="comment_delete">
-                                    <a href="javascript:{}" onclick="document.getElementById('comment_delete').submit(); return false;"><i class="far fa-trash-alt delete_icon"></i></a>
+                                    <a href="javascript:{}"
+                                        onclick="document.getElementById('comment_delete').submit(); return false;"><i
+                                            class="far fa-trash-alt delete_icon"></i></a>
                                 </form>
                             </div>
                             <% } %>
@@ -83,13 +102,13 @@
                         <div class="col-md-12">
                             <div class="d-flex justify-content-between">
                                 <strong><i class="fas fa-user"></i> <%= review.author.username %></strong>
-                                <p>
-                                    <span class="fa fa-star checked"></span>
-                                    <span class="fa fa-star <% if (review.rating > 1.5) { %> checked <% } %>"></span>
-                                    <span class="fa fa-star <% if (review.rating > 2.5) { %> checked <% } %>"></span>
-                                    <span class="fa fa-star <% if (review.rating > 3.5) { %> checked <% } %>"></span>
-                                    <span class="fa fa-star <% if (review.rating > 4.5) { %> checked <% } %>"></span>
-                                </p>
+                                <div class="star-rating">
+                                        <span class="fa fa-star fa-fw" style="color:#FFD700;"></span>
+                                        <span class="fa fa-star fa-fw" <% if(review.rating > 1.5) { %> style="color:#FFD700;" <% } %> ></span>
+                                        <span class="fa fa-star fa-fw" <% if(review.rating > 2.5) { %> style="color:#FFD700;" <% } %> ></span>
+                                        <span class="fa fa-star fa-fw" <% if(review.rating > 3.5) { %> style="color:#FFD700;" <% } %> ></span>
+                                        <span class="fa fa-star fa-fw" <% if(review.rating > 4.5) { %> style="color:#FFD700;" <% } %> ></span>
+                                    </div>
                                 <span class="text-muted"> 5 days ago</span>
                             </div>
                             <p><%- review.text %></p>
