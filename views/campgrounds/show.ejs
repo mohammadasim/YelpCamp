@@ -45,7 +45,6 @@
                     </div>
                     <em>(total reviews: <%= searchedCampground.reviews.length %>)</em>
                     <% } else { %>
-                    <% console.log(searchedCampground.rating)%>
                     <div class="star-rating">
                         <span class="fa fa-star fa-fw" style="color:#FFD700;"></span>
                         <span class="fa fa-star fa-fw" <% if(searchedCampground.rating > 1.5) { %> style="color:#FFD700;" <% } %> ></span>
