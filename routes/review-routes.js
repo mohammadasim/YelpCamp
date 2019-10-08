@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
 });
 
 // form for new review
-router.get("/new", isLoggedIn, checkReviewExistence,(req, res) => {
+router.get("/new", isLoggedIn, checkReviewExistence, (req, res) => {
   Campground.findById(req.params.id).then((foundCampground) => {
     if (!foundCampground) {
       req.flash("error", "Campground not found");
@@ -51,7 +51,12 @@ router.post("/", isLoggedIn, checkReviewExistence, (req, res) => {
             // Add review to Campground
             foundCampground.reviews.push(reviewWithUserAndCampground);
             // Populate review to retrieve review rating
-            foundCampground.populate({ path: "reviews", populate: { path: "review" } }).execPopulate().then((campground) => {
+            foundCampground.populate({
+              path: "reviews",
+              populate: {
+                path: "review"
+              }
+            }).execPopulate().then((campground) => {
               campground.rating = calculateAverage(campground.reviews);
               campground.save().then((updatedCampground) => {
                 req.flash("success", "Review successfully added");
@@ -81,7 +86,25 @@ router.post("/", isLoggedIn, checkReviewExistence, (req, res) => {
 
 // Review edit form
 router.get("/:review_id/edit", (req, res) => {
-  res.send("The review edit route has been invoked");
+  Review.findById(req.params.review_id).then((foundReview)=>{
+    if(!foundReview){
+      req.flash("error", "Review not found");
+      res.redirect("/campgrounds/<%= req.params.id %>");
+    } else{
+      res.render("reviews/edit", {
+        campground_id: req.params.id,
+        review: foundReview
+      });
+    }
+  }).catch((err)=>{
+    req.flash("error", err.message);
+    res.redirect("/campgrounds/<%= req.params.id %>");
+  })
+});
+
+//Update review
+router.put("/:review_id",(req, res)=>{
+  res.send("The put url for review has been invoked");
 });
 
 
