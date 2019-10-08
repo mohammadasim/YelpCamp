@@ -79,6 +79,11 @@ router.post("/", isLoggedIn, checkReviewExistence, (req, res) => {
   });
 });
 
+// Review edit form
+router.get("/:review_id/edit", (req, res) => {
+  res.send("The review edit route has been invoked");
+});
+
 
 
 
