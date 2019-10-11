@@ -86,25 +86,62 @@ router.post("/", isLoggedIn, checkReviewExistence, (req, res) => {
 
 // Review edit form
 router.get("/:review_id/edit", (req, res) => {
-  Review.findById(req.params.review_id).then((foundReview)=>{
-    if(!foundReview){
+  Review.findById(req.params.review_id).then((foundReview) => {
+    if (!foundReview) {
       req.flash("error", "Review not found");
       res.redirect("/campgrounds/<%= req.params.id %>");
-    } else{
+    } else {
       res.render("reviews/edit", {
         campground_id: req.params.id,
         review: foundReview
       });
     }
-  }).catch((err)=>{
+  }).catch((err) => {
     req.flash("error", err.message);
     res.redirect("/campgrounds/<%= req.params.id %>");
   })
 });
 
 //Update review
-router.put("/:review_id",(req, res)=>{
-  res.send("The put url for review has been invoked");
+router.put("/:review_id", (req, res) => {
+  Review.findOneAndUpdate({
+    _id: req.params.review_id
+  }, {
+    rating: req.body.rating,
+    text: req.body.text
+  }, (err, updatedReview) => {
+    if (err || !updatedReview) {
+      req.flash("error", err.message);
+      res.redirect("/campgrounds/" + req.params.id);
+    } else {
+      Campground.findById(req.params.id).then((foundCampground) => {
+        if (!foundCampground) {
+          req.flash("error", "An Error happened while updating your review");
+          res.redirect("/campgrounds/" + req.params.id);
+        } else {
+          foundCampground.populate({
+            path: "reviews",
+            model: "Review"
+          }).execPopulate().then((campground) => {
+            campground.rating = calculateAverage(campground.reviews);
+            campground.save().then((campgroundWihtUpdatedRatings) => {
+              req.flash("success", "Review successfully updated");
+              res.redirect("/campgrounds/" + campgroundWihtUpdatedRatings._id);
+            }).catch((err) => {
+              req.flash("error", err.message);
+              res.redirect("/campgrounds/" + req.params.id);
+            })
+          }).catch((err) => {
+            req.flash("error", err.message);
+            res.redirect("/campgrounds/" + req.params.id);
+          });
+        }
+      }).catch((err) => {
+        req.flash("error", err.message);
+        res.redirect("/campgrounds/" + req.params.id);
+      });
+    }
+  });
 });
 
 
