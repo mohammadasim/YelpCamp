@@ -10,6 +10,7 @@ const Campground = require("../models/campground"),
 
 const isLoggedIn = middleware.isLoggedIn;
 const checkReviewExistence = middleware.checkReviewExistance;
+const checkReviewAuthor = middleware.checkReviewAuthor;
 
 
 router.get("/", (req, res) => {
@@ -85,7 +86,7 @@ router.post("/", isLoggedIn, checkReviewExistence, (req, res) => {
 });
 
 // Review edit form
-router.get("/:review_id/edit", (req, res) => {
+router.get("/:review_id/edit",isLoggedIn,checkReviewAuthor,(req, res) => {
   Review.findById(req.params.review_id).then((foundReview) => {
     if (!foundReview) {
       req.flash("error", "Review not found");
@@ -103,7 +104,7 @@ router.get("/:review_id/edit", (req, res) => {
 });
 
 //Update review
-router.put("/:review_id", (req, res) => {
+router.put("/:review_id",isLoggedIn,checkReviewAuthor,(req, res) => {
   Review.findOneAndUpdate({
     _id: req.params.review_id
   }, {
