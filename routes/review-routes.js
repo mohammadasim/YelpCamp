@@ -145,7 +145,9 @@ router.put("/:review_id",isLoggedIn,checkReviewAuthor,(req, res) => {
   });
 });
 
+router.delete("/:review_id",(req,res)=>{
 
+});
 
 
 module.exports = router;
