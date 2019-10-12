@@ -53,25 +53,22 @@ function checkCommentAuthor(req, res, next) {
 }
 
 function checkReviewAuthor(req, res, next){
-    if(req.isAuthenticated()){
-        Review.findById(req.params.review_id).populate("author").exec((err,review)=>{
-            if(err || !review){
-                req.flash("error", "Review not found");
-                res.redirect("/campgrounds");
+    Review.findById(req.params.review_id).populate({
+        path: "author",
+        model: "User"
+    }).exec().then((foundReview)=>{
+        if(!foundReview){
+            req.flash("error", "Review not found");
+            res.redirect("/campgrounds/" + req.params.id);
+        } else{
+            if(foundReview.author.id === req.user.id){
+                next();
             } else{
-                if(review.author._id.equals(req.params.review_id)){
-                    next();
-                }else{
-                    req.flash("error", "Only review owners can change their review");
-                    res.redirect("/campgrounds");
-                }
+                req.flash("error", "Only the author of the review can updated it");
+                res.redirect("/campgrounds/" + req.params.id);
             }
-        });
-
-    }else{
-        req.flash("error", "You need to be logged in to do that");
-        res.redirect("/campgrounds");
-    }
+        }
+    })
 }
 
 function checkReviewExistance(req, res, next){

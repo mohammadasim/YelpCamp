@@ -6,6 +6,7 @@ const Campground = require("../models/campground"),
   helper = require("../config/helper"),
   middleware = require("../config/middleware"),
   calculateAverage = helper.calculateAverage,
+  updateCampgroundRatings = helper.updateCampgroundRatings,
   User = require("../models/user")
 
 const isLoggedIn = middleware.isLoggedIn;
@@ -52,14 +53,7 @@ router.post("/", isLoggedIn, checkReviewExistence, (req, res) => {
             // Add review to Campground
             foundCampground.reviews.push(reviewWithUserAndCampground);
             // Populate review to retrieve review rating
-            foundCampground.populate({
-              path: "reviews",
-              populate: {
-                path: "review"
-              }
-            }).execPopulate().then((campground) => {
-              campground.rating = calculateAverage(campground.reviews);
-              campground.save().then((updatedCampground) => {
+            updateCampgroundRatings(foundCampground).then((updatedCampground) => {
                 req.flash("success", "Review successfully added");
                 res.redirect("/campgrounds/" + updatedCampground._id);
               }).catch((err) => {
@@ -72,15 +66,10 @@ router.post("/", isLoggedIn, checkReviewExistence, (req, res) => {
             res.redirect("/campgrounds");
           });
         }).catch((err) => {
-          req.flash("error", err.message);
-          res.redirect("/campgrounds");
-        });
-      }).catch((err) => {
-        console.log("An error has happened while creating new review:", err);
+          console.log("An error has happened while creating new review:", err);
         req.flash("error", err.message);
         res.redirect("/campgrounds");
-      })
-
+        });
     }
   });
 });
